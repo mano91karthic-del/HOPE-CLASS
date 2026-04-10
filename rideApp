@@ -1,0 +1,87 @@
+import java.util.*;
+
+class Ride{
+    String user,rideType,rideStatus,paymentStatus,driver;
+    int distance;
+    Ride(String u,String r,int d,String rs,String ps,String dr){
+        user=u;rideType=r;distance=d;rideStatus=rs;paymentStatus=ps;driver=dr;
+    }
+}
+
+class RideApp{
+    ArrayList<Ride> list=new ArrayList<>();
+
+    void book(Ride r){list.add(r);}
+
+    void cancel(String u){
+        list.removeIf(x->x.user.equals(u));
+    }
+
+    void updateStatus(String u,String s){
+        for(Ride r:list) if(r.user.equals(u)) r.rideStatus=s;
+    }
+
+    void updatePayment(String u,String p){
+        for(Ride r:list) if(r.user.equals(u)) r.paymentStatus=p;
+    }
+
+    void show(){
+        for(Ride r:list){
+            System.out.println("User:"+r.user+"\nType:"+r.rideType+
+            "\nDistance:"+r.distance+"km\nStatus:"+r.rideStatus+
+            "\nPayment:"+r.paymentStatus+"\nDriver:"+r.driver+"\n----");
+        }
+    }
+
+    void showStatus(String s){
+        for(Ride r:list) if(r.rideStatus.equals(s))
+            System.out.println(r.user+" - "+r.rideStatus);
+    }
+}
+
+public class RideBooking{
+    public static void main(String[] a){
+        Scanner sc=new Scanner(System.in);
+        RideApp app=new RideApp();
+
+        while(true){
+            System.out.println("\n1.Book 2.Cancel 3.Update 4.Show 5.Exit");
+            int c=sc.nextInt();sc.nextLine();
+
+            switch(c){
+                case 1:
+                    System.out.print("Name:");String n=sc.nextLine();
+                    System.out.print("Ride Type:");String t=sc.nextLine();
+                    System.out.print("Distance:");int d=sc.nextInt();sc.nextLine();
+                    String dr=(d<=5)?"Driver1":(d<=15)?"Driver2":"Driver3";
+                    app.book(new Ride(n,t,d,"Booked","Pending",dr));
+                    break;
+
+                case 2:
+                    System.out.print("Name:");
+                    app.cancel(sc.nextLine());
+                    break;
+
+                case 3:
+                    System.out.print("Name:");String u=sc.nextLine();
+                    System.out.print("1.Status 2.Payment:");
+                    int ch=sc.nextInt();sc.nextLine();
+                    if(ch==1){
+                        System.out.print("Status:");
+                        app.updateStatus(u,sc.nextLine());
+                    }else{
+                        System.out.print("Payment:");
+                        app.updatePayment(u,sc.nextLine());
+                    }
+                    break;
+
+                case 4:
+                    app.show();
+                    break;
+
+                case 5:
+                    return;
+            }
+        }
+    }
+}
