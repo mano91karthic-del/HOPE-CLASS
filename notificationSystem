@@ -1,0 +1,161 @@
+import java.util.*;
+
+class Notification{
+    int id;
+    String title;
+    String message;
+    String type;
+    String priority;
+    String status;
+    String time;
+
+    Notification(int id,String title,String message,String type,String priority){
+        this.id=id;
+        this.title=title;
+        this.message=message;
+        this.type=type;
+        this.priority=priority;
+        this.status="Unread";
+        this.time=new Date().toString();
+    }
+}
+
+class NOTSYS{
+    ArrayList<Notification> list=new ArrayList<>();
+
+    void add(Notification n){
+        list.add(n);
+    }
+
+    void delete(int id){
+        int i=0;
+        for(Notification n:list){
+            if(n.id==id) break;
+            i++;
+        }
+        if(i<list.size()) list.remove(i);
+    }
+
+    void markRead(int id){
+        for(Notification n:list){
+            if(n.id==id){
+                n.status="Read";
+                break;
+            }
+        }
+    }
+
+    void updateMsg(int id,String msg){
+        for(Notification n:list){
+            if(n.id==id){
+                n.message=msg;
+                break;
+            }
+        }
+    }
+
+    void showAll(){
+        for(Notification n:list){
+            System.out.println("ID:"+n.id);
+            System.out.println("Title:"+n.title);
+            System.out.println("Message:"+n.message);
+            System.out.println("Type:"+n.type);
+            System.out.println("Priority:"+n.priority);
+            System.out.println("Status:"+n.status);
+            System.out.println("Time:"+n.time);
+            System.out.println("----------------------");
+        }
+    }
+
+    void showType(String type){
+        for(Notification n:list){
+            if(n.type.equals(type)){
+                System.out.println("ID:"+n.id);
+                System.out.println("Title:"+n.title);
+                System.out.println("----------------------");
+            }
+        }
+    }
+
+    void showPriority(String p){
+        for(Notification n:list){
+            if(n.priority.equals(p)){
+                System.out.println("ID:"+n.id);
+                System.out.println("Title:"+n.title);
+                System.out.println("----------------------");
+            }
+        }
+    }
+
+    void showUnread(){
+        for(Notification n:list){
+            if(n.status.equals("Unread")){
+                System.out.println("ID:"+n.id);
+                System.out.println("Title:"+n.title);
+                System.out.println("----------------------");
+            }
+        }
+    }
+}
+
+public class NotificationSystem{
+    public static void main(String[] args){
+        Scanner sc=new Scanner(System.in);
+        NOTSYS n=new NOTSYS();
+        int id=1;
+
+        while(true){
+            System.out.print("\n1.Add\n2.Delete\n3.Update\n4.Show\n5.Exit\nChoice:");
+            int ch=sc.nextInt(); sc.nextLine();
+
+            switch(ch){
+                case 1:
+                    System.out.print("Title:");
+                    String t=sc.nextLine();
+                    System.out.print("Message:");
+                    String m=sc.nextLine();
+                    System.out.print("Type(Alert/Reminder/System):");
+                    String ty=sc.nextLine();
+                    System.out.print("Priority(High/Medium/Low):");
+                    String p=sc.nextLine();
+                    n.add(new Notification(id++,t,m,ty,p));
+                    break;
+
+                case 2:
+                    System.out.print("Enter ID:");
+                    n.delete(sc.nextInt());
+                    break;
+
+                case 3:
+                    System.out.print("1.Mark Read 2.Update Msg:");
+                    int u=sc.nextInt(); sc.nextLine();
+                    System.out.print("Enter ID:");
+                    int uid=sc.nextInt(); sc.nextLine();
+                    if(u==1) n.markRead(uid);
+                    else{
+                        System.out.print("New Msg:");
+                        n.updateMsg(uid,sc.nextLine());
+                    }
+                    break;
+
+                case 4:
+                    System.out.print("1.All 2.Type 3.Priority 4.Unread:");
+                    int s=sc.nextInt(); sc.nextLine();
+                    if(s==1) n.showAll();
+                    else if(s==2){
+                        System.out.print("Type:");
+                        n.showType(sc.nextLine());
+                    }
+                    else if(s==3){
+                        System.out.print("Priority:");
+                        n.showPriority(sc.nextLine());
+                    }
+                    else n.showUnread();
+                    break;
+
+                case 5:
+                    return;
+            }
+        }
+    }
+}
